@@ -46,14 +46,16 @@ def load_synthetic_fold(model_gen, dataset, ratio, fold_idx, base_path="syntheti
     return X_syn, y_syn, tr_idx, val_idx
 
 
-def save_oof_models(models_list, dataset_name, model_pred, model_gen, path="oof_models"):
-    os.makedirs(path, exist_ok=True)
-    with open(os.path.join(path, dataset_name, model_gen if model_gen != "" else "No gen model", f"{model_pred}_list.pkl", ), "wb") as f:
+def save_oof_models(models_list, dataset_name, model_pred, model_gen, ratio, path="oof_models"):
+    folder = os.path.join(path, dataset_name, model_gen if model_gen != "" else "No gen model", f"ratio_{ratio}")
+    os.makedirs(folder, exist_ok=True)
+    
+    with open(os.path.join(folder, f"{model_pred}_list.pkl", ), "wb") as f:
         pickle.dump(models_list, f)
 
 
-def load_oof_models(dataset_name, model_pred, model_gen, path="oof_models"):
-    file_path = os.path.join(path, dataset_name, model_gen if model_gen != "" else "No gen model", f"{model_pred}_list.pkl")
+def load_oof_models(dataset_name, model_pred, model_gen, ratio, path="oof_models"):
+    file_path = os.path.join(path, dataset_name, model_gen if model_gen != "" else "No gen model", f"ratio_{ratio}", f"{model_pred}_list.pkl")
     
     with open(file_path, "rb") as f:
         models_list = pickle.load(f)
